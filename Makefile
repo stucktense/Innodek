@@ -32,12 +32,13 @@ uninstall:
 	rm -f $(BINDIR)/lang
 	rm -rf $(LIBDIR)
 	@echo "Successfully uninstalled 'lang'"
-
 deb: $(TARGET)
 	mkdir -p $(BIN_DEST)
 	cp $(TARGET) $(BIN_DEST)/lang
 	chmod 755 $(BIN_DEST)/lang
-	chmod 755 $(DEB_DIR)/DEBIAN
+	# Set required permissions for Debian maintainer scripts
+	chmod 755 $(DEB_DIR)/DEBIAN/postinst
+	chmod 755 $(DEB_DIR)/DEBIAN/prerm
 	dpkg-deb --build $(DEB_DIR) innodek_1.0.0_amd64.deb
 	@echo "Created innodek_1.0.0_amd64.deb successfully!"
 

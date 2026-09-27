@@ -1,0 +1,10 @@
+Package: innodek
+Version: 1.0.0
+Section: utils
+Priority: optional
+Architecture: amd64
+Maintainer: stucktense <your.email@example.com>
+Depends: libc6, curl
+Description: Innodek Functional Programming Language
+ Innodek is a lightweight functional programming language written in C.
+ It features dynamic typing, custom syntax, and built-in package management.
