@@ -1,0 +1,8 @@
+# This is a comment
+var.new[message, "Hello from a file!"]
+printIn(message)
+var.new[my_score, 100]
+printIn(my_score)
+
+pkg.install[math]
+printIn(pi)

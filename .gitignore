@@ -1,0 +1,7 @@
+# Build outputs and binaries
+lang
+src/*.o
+
+# OS specific files
+.DS_Store
+Thumbs.db
