@@ -5,8 +5,13 @@ SRC = src/main.c src/value.c src/env.c src/parser.c
 OBJ = $(SRC:.c=.o)
 TARGET = lang
 
-PREFIX ?= /usr/local/bin
-LIBDIR ?= /usr/local/lib/lang
+# Automatically detects Termux's $PREFIX environment variable
+PREFIX ?= /usr/local
+BINDIR = $(PREFIX)/bin
+LIBDIR = $(PREFIX)/lib/lang
+
+DEB_DIR = package
+BIN_DEST = $(DEB_DIR)/usr/local/bin
 
 all: $(TARGET)
 
@@ -16,22 +21,28 @@ $(TARGET): $(OBJ)
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Install binary globally and create standard library directory
 install: $(TARGET)
-	mkdir -p $(PREFIX)
+	mkdir -p $(BINDIR)
 	mkdir -p $(LIBDIR)
-	cp $(TARGET) $(PREFIX)/lang
-	
-	# Copy any standard library files into the global system path
+	cp $(TARGET) $(BINDIR)/lang
 	cp libs/*.fn $(LIBDIR)/ 2>/dev/null || true
-	@echo "Successfully installed 'lang' and libraries to system paths."
+	@echo "Successfully installed 'lang' to $(BINDIR)/lang"
 
 uninstall:
-	rm -f $(PREFIX)/lang
+	rm -f $(BINDIR)/lang
 	rm -rf $(LIBDIR)
-	@echo "Successfully uninstalled 'lang'."
+	@echo "Successfully uninstalled 'lang'"
+
+deb: $(TARGET)
+	mkdir -p $(BIN_DEST)
+	cp $(TARGET) $(BIN_DEST)/lang
+	chmod 755 $(BIN_DEST)/lang
+	chmod 755 $(DEB_DIR)/DEBIAN
+	dpkg-deb --build $(DEB_DIR) innodek_1.0.0_amd64.deb
+	@echo "Created innodek_1.0.0_amd64.deb successfully!"
 
 clean:
 	rm -f src/*.o $(TARGET)
 
 .PHONY: all install uninstall clean
+
